@@ -1,0 +1,431 @@
+<html><head><base href="https://websim.app/socialmessenger/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InstaMessage Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary-color: #405DE6;
+        --secondary-color: #5851DB;
+        --background-color: #FAFAFA;
+        --text-color: #262626;
+        --light-gray: #DBDBDB;
+        --chat-bg: #DCF8C6;
+        --chat-sent: #E1FFC7;
+        --chat-received: #FFFFFF;
+        --error-color: #ED4956;
+    }
+    body {
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: var(--background-color);
+        color: var(--text-color);
+    }
+    .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: white;
+        min-height: 100vh;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .header {
+        background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 15px;
+        text-align: center;
+        font-weight: 500;
+    }
+    .search-bar {
+        display: flex;
+        margin: 15px;
+    }
+    .search-bar input {
+        flex-grow: 1;
+        padding: 12px;
+        border: 1px solid var(--light-gray);
+        border-radius: 20px 0 0 20px;
+        font-size: 14px;
+    }
+    .search-bar button {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 0 20px 20px 0;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .search-bar button:hover {
+        background-color: var(--secondary-color);
+    }
+    .posts {
+        margin-top: 20px;
+    }
+    .post {
+        background-color: white;
+        border: 1px solid var(--light-gray);
+        margin-bottom: 20px;
+        border-radius: 3px;
+    }
+    .post-header {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+    }
+    .post-header img {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    .post-header .username {
+        font-weight: 500;
+    }
+    .post-image {
+        width: 100%;
+        max-height: 600px;
+        object-fit: cover;
+    }
+    .post-actions {
+        display: flex;
+        padding: 10px;
+    }
+    .post-actions button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        margin-right: 15px;
+        font-size: 24px;
+    }
+    .post-likes {
+        padding: 0 10px;
+        font-weight: 500;
+    }
+    .post-caption {
+        padding: 10px;
+        line-height: 1.4;
+    }
+    .login-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    }
+    .login-form h2 {
+        color: white;
+        margin-bottom: 20px;
+    }
+    .login-form input {
+        margin: 10px 0;
+        padding: 12px;
+        width: 250px;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+    .login-form button {
+        background-color: white;
+        color: var(--primary-color);
+        border: none;
+        padding: 12px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        font-weight: 500;
+        transition: background-color 0.3s;
+    }
+    .login-form button:hover {
+        background-color: #f0f0f0;
+    }
+    .error-message {
+        color: var(--error-color);
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+        font-weight: 500;
+    }
+    .user-list {
+        margin: 15px;
+        background-color: white;
+        border: 1px solid var(--light-gray);
+        border-radius: 5px;
+    }
+    .user-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 15px;
+        border-bottom: 1px solid var(--light-gray);
+    }
+    .user-item:last-child {
+        border-bottom: none;
+    }
+    .user-item img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    .user-info {
+        flex-grow: 1;
+    }
+    .user-item button {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    .user-item button:hover {
+        background-color: var(--secondary-color);
+    }
+    .chat-window {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
+    .chat-header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+    }
+    .chat-header img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    .chat-header .user-info {
+        flex-grow: 1;
+    }
+    .chat-header .user-status {
+        font-size: 12px;
+        opacity: 0.8;
+    }
+    .chat-messages {
+        flex-grow: 1;
+        padding: 20px;
+        overflow-y: auto;
+        background-color: var(--chat-bg);
+    }
+    .message {
+        max-width: 70%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+    }
+    .message.sent {
+        background-color: var(--chat-sent);
+        align-self: flex-end;
+        margin-left: auto;
+    }
+    .message.received {
+        background-color: var(--chat-received);
+        align-self: flex-start;
+    }
+    .chat-input {
+        display: flex;
+        padding: 10px;
+        background-color: white;
+        border-top: 1px solid var(--light-gray);
+    }
+    .chat-input input {
+        flex-grow: 1;
+        padding: 10px;
+        border: 1px solid var(--light-gray);
+        border-radius: 20px;
+        margin-right: 10px;
+    }
+    .chat-input button {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+    .back-button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        margin-right: 10px;
+    }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script>
+new Vue({
+    el: '#app',
+    data: {
+        currentView: 'login',
+        username: '',
+        searchQuery: '',
+        errorMessage: '',
+        posts: [
+            { id: 1, user: 'Alice', avatar: 'https://i.pravatar.cc/150?img=1', image: 'https://picsum.photos/id/1018/600/600', caption: 'Disfrutando de la naturaleza 🌿', likes: 124 },
+            { id: 2, user: 'Bob', avatar: 'https://i.pravatar.cc/150?img=2', image: 'https://picsum.photos/id/1015/600/600', caption: 'Aventuras urbanas 🏙️', likes: 89 },
+            { id: 3, user: 'Charlie', avatar: 'https://i.pravatar.cc/150?img=3', image: 'https://picsum.photos/id/1019/600/600', caption: 'Momentos que inspiran ✨', likes: 203 }
+        ],
+        users: [
+            { name: 'Alice', avatar: 'https://i.pravatar.cc/150?img=1', status: 'online' },
+            { name: 'Bob', avatar: 'https://i.pravatar.cc/150?img=2', status: 'offline' },
+            { name: 'Charlie', avatar: 'https://i.pravatar.cc/150?img=3', status: 'online' },
+            { name: 'David', avatar: 'https://i.pravatar.cc/150?img=4', status: 'offline' },
+            { name: 'Eve', avatar: 'https://i.pravatar.cc/150?img=5', status: 'online' }
+        ],
+        filteredUsers: [],
+        selectedUser: null,
+        messageText: '',
+        chatMessages: [],
+        userStatus: '',
+        typingTimeout: null
+    },
+    methods: {
+        login() {
+            if (this.username.trim() !== '') {
+                const existingUser = this.users.find(user => user.name.toLowerCase() === this.username.toLowerCase());
+                if (existingUser) {
+                    this.errorMessage = 'Este usuario ya existe. Por favor, elige otro nombre.';
+                } else {
+                    this.users.push({ name: this.username, avatar: `https://i.pravatar.cc/150?img=${this.users.length + 1}`, status: 'online' });
+                    this.currentView = 'main';
+                    this.errorMessage = '';
+                }
+            } else {
+                this.errorMessage = 'Por favor, ingresa un nombre de usuario.';
+            }
+        },
+        searchUsers() {
+            this.filteredUsers = this.users.filter(user => 
+                user.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+            );
+        },
+        likePost(post) {
+            post.likes++;
+        },
+        openChat(user) {
+            this.selectedUser = user;
+            this.currentView = 'chat';
+            this.chatMessages = [];
+            this.userStatus = user.status === 'online' ? 'en línea' : 'desconectado';
+        },
+        sendMessage() {
+            if (this.messageText.trim() !== '') {
+                this.chatMessages.push({
+                    text: this.messageText,
+                    sent: true,
+                    timestamp: new Date().toLocaleTimeString()
+                });
+                this.messageText = '';
+                this.simulateReply();
+            }
+        },
+        simulateReply() {
+            setTimeout(() => {
+                this.userStatus = 'escribiendo...';
+                setTimeout(() => {
+                    this.chatMessages.push({
+                        text: 'Este es un mensaje de respuesta simulado.',
+                        sent: false,
+                        timestamp: new Date().toLocaleTimeString()
+                    });
+                    this.userStatus = 'en línea';
+                }, 2000);
+            }, 1000);
+        },
+        goBack() {
+            this.currentView = 'main';
+            this.selectedUser = null;
+        },
+        startTyping() {
+            clearTimeout(this.typingTimeout);
+            this.typingTimeout = setTimeout(() => {
+                // Aquí podrías enviar una señal al servidor de que el usuario ha dejado de escribir
+            }, 1000);
+        }
+    },
+    template: `
+        <div class="container">
+            <div v-if="currentView === 'login'" class="login-form">
+                <h2>Bienvenido a InstaMessage Pro</h2>
+                <input v-model="username" placeholder="Nombre de usuario" @keyup.enter="login">
+                <button @click="login">Entrar</button>
+                <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+            </div>
+            <div v-else-if="currentView === 'main'">
+                <div class="header">
+                    <h1>InstaMessage Pro</h1>
+                </div>
+                <div class="search-bar">
+                    <input v-model="searchQuery" placeholder="Buscar usuarios..." @input="searchUsers">
+                    <button @click="searchUsers">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div v-if="searchQuery" class="user-list">
+                    <div v-for="user in filteredUsers" :key="user.name" class="user-item">
+                        <img :src="user.avatar" :alt="user.name">
+                        <div class="user-info">{{ user.name }}</div>
+                        <button @click="openChat(user)">Enviar mensaje</button>
+                    </div>
+                </div>
+                <div v-else class="posts">
+                    <div v-for="post in posts" :key="post.id" class="post">
+                        <div class="post-header">
+                            <img :src="post.avatar" :alt="post.user">
+                            <span class="username">{{ post.user }}</span>
+                        </div>
+                        <img :src="post.image" :alt="post.caption" class="post-image">
+                        <div class="post-actions">
+                            <button @click="likePost(post)">❤️</button>
+                            <button>💬</button>
+                            <button>📤</button>
+                        </div>
+                        <div class="post-likes">{{ post.likes }} likes</div>
+                        <div class="post-caption">
+                            <strong>{{ post.user }}</strong> {{ post.caption }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-else-if="currentView === 'chat'" class="chat-window">
+                <div class="chat-header">
+                    <button class="back-button" @click="goBack">←</button>
+                    <img :src="selectedUser.avatar" :alt="selectedUser.name">
+                    <div class="user-info">
+                        <div>{{ selectedUser.name }}</div>
+                        <div class="user-status">{{ userStatus }}</div>
+                    </div>
+                </div>
+                <div class="chat-messages">
+                    <div v-for="(message, index) in chatMessages" :key="index" :class="['message', message.sent ? 'sent' : 'received']">
+                        {{ message.text }}
+                        <div style="font-size: 0.8em; color: #888; text-align: right;">{{ message.timestamp }}</div>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input v-model="messageText" @input="startTyping" placeholder="Escribe un mensaje..." @keyup.enter="sendMessage">
+                    <button @click="sendMessage">Enviar</button>
+                </div>
+            </div>
+        </div>
+    `
+});
+</script>
+</body>
+</html>
